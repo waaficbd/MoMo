@@ -334,12 +334,12 @@
         <div class="slider-section">
             <div class="slider-header">
                 <span>Linani Lemali</span>
-                <span id="valAmt" class="accent-text">E 5,000</span>
+                <span id="valAmt" class="accent-text">SZL 5,000</span>
             </div>
             <input type="range" id="amt" min="500" max="50000" step="500" value="5000">
             <div class="slider-footer">
-                <span>E 500</span>
-                <span>E 50,000</span>
+                <span>SZL 500</span>
+                <span>SZL 50,000</span>
             </div>
         </div>
 
@@ -359,7 +359,7 @@
         <!-- Display Area -->
         <div class="result-container">
             <span class="result-label">Lokukhokha Ngenyanga</span>
-            <span id="monthly" class="result-amount">E 438</span>
+            <span id="monthly" class="result-amount">SZL 438</span>
         </div>
         
         <div class="interest-rate-info">
@@ -425,7 +425,7 @@
         const durationMonths = Number(durEl.value) || 1;
 
         // Display updated values in labels
-        document.getElementById('valAmt').innerText = `E ${formatSZL(principal)}`;
+        document.getElementById('valAmt').innerText = `SZL ${formatSZL(principal)}`;
         
         let durationText = "";
         if (durationMonths === 1) {
@@ -441,7 +441,7 @@
         const totalAmount = principal + totalInterest;
         calculatedMonthly = Math.round(totalAmount / durationMonths);
 
-        document.getElementById('monthly').innerText = `E ${formatSZL(calculatedMonthly)}`;
+        document.getElementById('monthly').innerText = `SZL ${formatSZL(calculatedMonthly)}`;
     }
 
     function goToPage2() {
